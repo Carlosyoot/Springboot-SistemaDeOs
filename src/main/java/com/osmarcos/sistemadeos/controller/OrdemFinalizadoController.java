@@ -32,16 +32,12 @@ public class OrdemFinalizadoController {
         List<OrdemServicoFinalizado> ordensFiltradas;
 
         if (colaborador != null && data != null) {
-            // Filtra por colaborador e data
             ordensFiltradas = ordemServicoFinalizadoRepository.findByColaboradorAndDataFinalizado(colaborador, data);
         } else if (colaborador != null) {
-            // Filtra apenas por colaborador
             ordensFiltradas = ordemServicoFinalizadoRepository.findByColaborador(colaborador);
         } else if (data != null) {
-            // Filtra apenas por data
             ordensFiltradas = ordemServicoFinalizadoRepository.findByDataFinalizado(data);
         } else {
-            // Retorna todas as ordens se nenhum filtro for fornecido
             ordensFiltradas = ordemServicoFinalizadoRepository.findAll();
         }
 
