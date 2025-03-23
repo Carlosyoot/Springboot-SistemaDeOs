@@ -19,6 +19,10 @@ public class OrdemServico {
     @JoinColumn(name = "colaborador_id")
     private Colaborador colaborador;
 
+    @ManyToOne
+    @JoinColumn(name = "produto_id")
+    private Produtos produto;
+
 
 
 
