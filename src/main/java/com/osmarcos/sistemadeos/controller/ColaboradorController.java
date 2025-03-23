@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.osmarcos.sistemadeos.repositorio.ColaboradorRepositorio;
 import com.osmarcos.sistemadeos.services.ColaboradoresService;
+
+import jakarta.validation.Valid;
+
 import com.osmarcos.sistemadeos.entidades.Colaborador;
 
 
@@ -40,8 +43,8 @@ public class ColaboradorController {
     }
     
     @PostMapping
-    public ResponseEntity<Object> criarColaborador(@RequestBody Colaborador colaborador) {
-        return service.criarColaborador(colaborador);
+    public ResponseEntity<Object> criarColaborador(@Valid @RequestBody Colaborador colaborador) {
+        return service.criarColaborador(colaborador); 
     }
 
     @DeleteMapping("/nome")

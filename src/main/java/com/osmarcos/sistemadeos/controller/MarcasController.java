@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.osmarcos.sistemadeos.entidades.Marcas;
 import com.osmarcos.sistemadeos.repositorio.MarcasRepositorio;
 import com.osmarcos.sistemadeos.services.MarcasService;
+import com.osmarcos.sistemadeos.services.UpdateEmitter;
 
 import jakarta.transaction.Transactional;
 
@@ -31,6 +32,7 @@ public class MarcasController {
 
     @Autowired
     MarcasService service;
+
 
     @GetMapping
     public List<String> listar() {
