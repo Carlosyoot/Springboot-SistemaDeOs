@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource; 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.osmarcos.sistemadeos.entidades.Colaborador;
 import com.osmarcos.sistemadeos.repositorio.ColaboradorRepositorio;
@@ -22,7 +23,12 @@ public class ColaboradoresService {
     private UpdateEmitter update;
 
     @Autowired
-    private MessageSource messageSource; 
+    private MessageSource messageSource;
+    
+    @Autowired
+    private PasswordEncoder encoder;
+
+
 
     public List<String> listarColaboradores() {
         return colaboradorRepository.findAllNomes();
@@ -32,19 +38,18 @@ public class ColaboradoresService {
     public ResponseEntity<Object> criarColaborador(Colaborador colaborador) {
         try {
             if (colaboradorRepository.existsByNome(colaborador.getNome())) {
-
                 String msg = messageSource.getMessage("colaborador_nome_em_uso", null, Locale.getDefault());
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
             }
 
+            String senhaHash = encoder.encode(colaborador.getSenha());
+            colaborador.setSenha(senhaHash);
+            
             Colaborador novoColaborador = colaboradorRepository.save(colaborador);
-
-            update.notificarTodos(); 
+            update.notificarTodos();
 
             return ResponseEntity.status(HttpStatus.CREATED).body(novoColaborador);
-
         } catch (Exception e) {
-
             String msg = messageSource.getMessage("erro_integridade_banco", null, Locale.getDefault());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
         }

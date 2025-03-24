@@ -1,10 +1,9 @@
 package com.osmarcos.sistemadeos.controller;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,22 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.osmarcos.sistemadeos.entidades.Marcas;
 import com.osmarcos.sistemadeos.repositorio.MarcasRepositorio;
 import com.osmarcos.sistemadeos.services.MarcasService;
-import com.osmarcos.sistemadeos.services.UpdateEmitter;
-
-import jakarta.transaction.Transactional;
-
-
 
 @RestController
 @RequestMapping("/marcas")
 public class MarcasController {
 
     @Autowired
-    MarcasRepositorio marcasRepository;
+    private MarcasService marcasService;
 
     @Autowired
-    MarcasService service;
-
+    private MarcasRepositorio marcasRepository;
 
     @GetMapping
     public List<String> listar() {
@@ -40,28 +33,12 @@ public class MarcasController {
     }
 
     @PostMapping
-    @Transactional
-    public ResponseEntity<Object> criarNovaMarca(@RequestBody Marcas marca) {
-        try {
-
-            if (marcasRepository.existsByNome(marca.getNome())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Erro: O nome da marca já está em uso.");
-            }
-
-            Marcas novaMarca = marcasRepository.save(marca); 
-            return ResponseEntity.status(HttpStatus.CREATED).body(novaMarca);
-        } catch (DataIntegrityViolationException e) {
-    
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("Erro de integridade: Algo ocorreu no\n banco de dados");
-        }
+    public ResponseEntity<Object> criarMarca(@RequestBody Marcas marca, Locale locale) {
+        return marcasService.criarMarca(marca, locale);
     }
 
     @DeleteMapping("/nome")
-    public ResponseEntity<Object> deletarMarca(@RequestParam String nome) {
-        return service.deletarMarca(nome);
+    public ResponseEntity<Object> deletarMarca(@RequestParam String nome, Locale locale) {
+        return marcasService.deletarMarca(nome, locale);
     }
-    
 }

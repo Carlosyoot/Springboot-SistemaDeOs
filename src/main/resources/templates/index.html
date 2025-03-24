@@ -29,9 +29,7 @@
         const eventSource = new EventSource('/sse/subscribe');
 
         eventSource.onmessage = function(event) {
-
-            console.log("Mensagem recebida")
-
+            console.log("Mensagem recebida");
             const aviso = document.getElementById('aviso-atualizacao');
             aviso.style.display = 'block';
         };
